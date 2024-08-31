@@ -10,6 +10,9 @@ import {
 import { Input } from "./ui/input";
 import { FormFieldType } from "./forms/PatientForm";
 import Image from "next/image";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
+
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -25,7 +28,9 @@ interface CustomProps {
   renderSkeleton?: (field: any) => React.ReactNode;
 }
 
-const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
+type E164Number = string;
+
+const RenderInput = ({ field, props }: { field: any; props: CustomProps }) => {
   const { fieldType, iconSrc, iconAlt, placeholder } = props;
   switch (fieldType) {
     case FormFieldType.INPUT:
@@ -40,10 +45,29 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               className="ml-2"
             />
           )}
-          <FormControl {...field} className="shad-input border-0" />
+          <FormControl>
+            <Input
+              placeholder={placeholder}
+              {...field}
+              className="shad-input border-0"
+            />
+          </FormControl>
         </div>
       );
-
+    case FormFieldType.PHONE_INPUT:
+      return (
+        <FormControl>
+          <PhoneInput
+            value={field.value as string | undefined}
+            onChange={field.onChange}
+            defaultCountry="BD"
+            placeholder={placeholder}
+            international
+            withCountryCallingCode
+            className="input-phone border-0"
+          />
+        </FormControl>
+      );
     default:
       break;
   }
@@ -67,7 +91,7 @@ export default function CustomFormField(props: CustomProps) {
           {fieldType !== FormFieldType.CHECKBOX && label && (
             <FormLabel>{label}</FormLabel>
           )}
-          <RenderField field={field} props={props} />
+          <RenderInput field={field} props={props} />
           <FormMessage className="shad-error" />
         </FormItem>
       )}
