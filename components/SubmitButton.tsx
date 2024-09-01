@@ -6,8 +6,8 @@ interface ButtonProps {
 }
 export default function SubmitButton({ isLoading, className, children }: ButtonProps) {
   return (
-      <Button type='submit' disabled={isLoading}>
-          
+      <Button type='submit' disabled={isLoading} >
+          Submit
     </Button>
   )
 }
